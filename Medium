@@ -1,0 +1,125 @@
+import javax.persistence.*;
+import org.hibernate.*;
+import org.hibernate.cfg.Configuration;
+
+@Entity
+@Table(name = "students")
+public class Student {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    private String name;
+    private int age;
+
+    // Constructors
+    public Student() {}
+    public Student(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    // Getters & Setters
+    public int getId() { return id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public int getAge() { return age; }
+    public void setAge(int age) { this.age = age; }
+
+    // Main method for CRUD operations
+    public static void main(String[] args) {
+        // Configure SessionFactory
+        SessionFactory factory = new Configuration()
+                                    .configure("hibernate.cfg.xml")
+                                    .addAnnotatedClass(Student.class)
+                                    .buildSessionFactory();
+
+        // Create
+        Session session = factory.openSession();
+        Transaction tx = session.beginTransaction();
+        Student s1 = new Student("Aarushi", 21);
+        session.save(s1);
+        tx.commit();
+        System.out.println("Student saved: " + s1.getName());
+
+        // Read
+        session = factory.openSession();
+        Student fetched = session.get(Student.class, s1.getId());
+        System.out.println("Fetched Student: " + fetched.getName() + ", Age: " + fetched.getAge());
+
+        // Update
+        tx = session.beginTransaction();
+        fetched.setAge(22);
+        session.update(fetched);
+        tx.commit();
+        System.out.println("Updated Age to: " + fetched.getAge());
+
+        // Delete
+        tx = session.beginTransaction();
+        session.delete(fetched);
+        tx.commit();
+        System.out.println("Deleted Student with ID: " + fetched.getId());
+
+        session.close();
+        factory.close();
+    }
+}
+
+HIBERNATE CRUD:
+import javax.persistence.*;
+import org.hibernate.*;
+import org.hibernate.cfg.Configuration;
+@Entity
+@Table(name = "students")
+public class Student {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private String name;
+    private int age;
+    // Constructors
+    public Student() {}
+    public Student(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+    // Getters & Setters
+    public int getId() { return id; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public int getAge() { return age; }
+    public void setAge(int age) { this.age = age; }
+    // Main method for CRUD operations
+    public static void main(String[] args) {
+        // Configure SessionFactory
+        SessionFactory factory = new Configuration()
+                                    .configure("hibernate.cfg.xml")
+                                    .addAnnotatedClass(Student.class)
+                                    .buildSessionFactory();
+        // Create
+        Session session = factory.openSession();
+        Transaction tx = session.beginTransaction();
+        Student s1 = new Student("Aarushi", 21);
+        session.save(s1);
+        tx.commit();
+        System.out.println("Student saved: " + s1.getName());
+        // Read
+        session = factory.openSession();
+        Student fetched = session.get(Student.class, s1.getId());
+        System.out.println("Fetched Student: " + fetched.getName() + ", Age: " + fetched.getAge());
+        // Update
+        tx = session.beginTransaction();
+        fetched.setAge(22);
+        session.update(fetched);
+        tx.commit();
+        System.out.println("Updated Age to: " + fetched.getAge());
+        // Delete
+        tx = session.beginTransaction();
+        session.delete(fetched);
+        tx.commit();
+        System.out.println("Deleted Student with ID: " + fetched.getId());
+        session.close();
+        factory.close();
+    }
+}
